@@ -5,6 +5,8 @@ from selenium import webdriver
 
 import time
 import urllib3
+import requests
+import os
 
 # problem with chromium, error message
 # WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/chromedriver"
@@ -31,12 +33,29 @@ import urllib3
 # )
 
 
-WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/"
+WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
+PROF_PATH = "/home/linuser/.mozilla/firefox/xpdj4t5a.default"
 capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
-driver = webdriver.Firefox(WEBDRIVER_PATH)
-driver.get("http://www.google.com/")
-search_box = driver.find_element_by_name("q")
-search_box.send_keys("FirefoxDriver")
-search_box.submit()
+
+profile = webdriver.FirefoxProfile(profile_directory=PROF_PATH)
+# profile.set_preference("browser.cache.disk.enable", True)
+# profile.set_preference("browser.cache.memory.enable", True)
+# profile.set_preference("browser.cache.offline.enable", True)
+# profile.set_preference("network.http.use-cache", True)
+
+ff_options = webdriver.FirefoxOptions()
+# ff_options.add_argument("--connect-existing")
+# ff_options.add_argument("--headless")
+
+
+driver = webdriver.Firefox(
+    executable_path=WEBDRIVER_PATH, firefox_profile=profile, options=ff_options
+)
+driver.get("http://youtube.com/")
 time.sleep(5)  # Let the user actually see something!
-driver.quit()
+# driver.quit()
+
+# page = requests.get("http://youtube.com/")
+# f = open("yt.html", "w")
+# f.write(page.text)
+# f.close()
