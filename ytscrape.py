@@ -37,6 +37,17 @@ import os
 
 
 def getYTTitles(webdriver_path, firefox_profile=None):
+    """Scrape the titles of the thumbnails in the youtube
+    title page.
+
+    Args:
+        webdriver_path (str): path to geckodriver
+        firefox_profile (str, optional): Path to firefox profile. Should be passed as it makes
+        little sense for now. Defaults to None.
+
+    Returns:
+        list: List of title strings
+    """
 
     WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
     PROF_PATH = firefox_profile
