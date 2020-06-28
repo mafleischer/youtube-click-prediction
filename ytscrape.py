@@ -36,41 +36,34 @@ import os
 # )
 
 
-WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
-PROF_PATH = "/home/linuser/.mozilla/firefox/xpdj4t5a.default"
-capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
+def getYTTitles(webdriver_path, firefox_profile=None):
 
-profile = webdriver.FirefoxProfile(profile_directory=PROF_PATH)
-# profile.set_preference("browser.cache.disk.enable", True)
-# profile.set_preference("browser.cache.memory.enable", True)
-# profile.set_preference("browser.cache.offline.enable", True)
-# profile.set_preference("network.http.use-cache", True)
+    WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
+    PROF_PATH = firefox_profile
+    PROF_PATH = "/home/linuser/.mozilla/firefox/xpdj4t5a.default"
 
-ff_options = webdriver.FirefoxOptions()
-ff_options.add_argument("--connect-existing")
-ff_options.add_argument("--headless")
+    if firefox_profile:
+        profile = webdriver.FirefoxProfile(profile_directory=PROF_PATH)
+    else:
+        profile = None
 
+    ff_options = webdriver.FirefoxOptions()
+    ff_options.add_argument("--connect-existing")
+    ff_options.add_argument("--headless")
 
-driver = webdriver.Firefox(
-    executable_path=WEBDRIVER_PATH, firefox_profile=profile, options=ff_options
-)
+    driver = webdriver.Firefox(
+        executable_path=WEBDRIVER_PATH, firefox_profile=profile, options=ff_options
+    )
 
-wait = WebDriverWait(driver, 10)
-driver.get("http://youtube.com/")
-# wait.until(ec.presence_of_all_elements_located((By.ID, "video-title-link")))
+    driver.get("http://youtube.com/")
 
-src = driver.find_element_by_tag_name("html").get_attribute("outerHTML")
-# page = driver.page_source
-f = open("yt.html", "w")
-f.write(src)
-f.close()
+    src = driver.find_element_by_tag_name("html").get_attribute("outerHTML")
+    driver.quit()
 
-# elements = driver.find_element_by_id("video-title-link")
-# print(elements.get_attribute("title"))
+    f = open("yt.html", "w")
+    f.write(src)
+    f.close()
 
-soup = BeautifulSoup(src, "html.parser")
-for tag in soup.findAll("a", {"id": "video-title-link"}):
-    print(tag.get("title"))
-
-driver.quit()
+    soup = BeautifulSoup(src, "html.parser")
+    return [tag.get("title") for tag in soup.findAll("a", {"id": "video-title-link"})]
 
