@@ -2,6 +2,9 @@
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
 import time
 import urllib3
@@ -44,18 +47,30 @@ profile = webdriver.FirefoxProfile(profile_directory=PROF_PATH)
 # profile.set_preference("network.http.use-cache", True)
 
 ff_options = webdriver.FirefoxOptions()
-# ff_options.add_argument("--connect-existing")
-# ff_options.add_argument("--headless")
+ff_options.add_argument("--connect-existing")
+ff_options.add_argument("--headless")
 
 
 driver = webdriver.Firefox(
     executable_path=WEBDRIVER_PATH, firefox_profile=profile, options=ff_options
 )
-driver.get("http://youtube.com/")
-time.sleep(5)  # Let the user actually see something!
-# driver.quit()
 
-# page = requests.get("http://youtube.com/")
-# f = open("yt.html", "w")
-# f.write(page.text)
-# f.close()
+wait = WebDriverWait(driver, 10)
+driver.get("http://youtube.com/")
+# wait.until(ec.presence_of_all_elements_located((By.ID, "video-title-link")))
+
+src = driver.find_element_by_tag_name("html").get_attribute("outerHTML")
+# page = driver.page_source
+f = open("yt.html", "w")
+f.write(src)
+f.close()
+
+# elements = driver.find_element_by_id("video-title-link")
+# print(elements.get_attribute("title"))
+
+soup = BeautifulSoup(src, "html.parser")
+for tag in soup.findAll("a", {"id": "video-title-link"}):
+    print(tag.get("title"))
+
+driver.quit()
+
