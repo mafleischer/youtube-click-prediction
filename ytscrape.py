@@ -53,28 +53,44 @@ def getYTTitles(webdriver_path, firefox_profile=None):
     PROF_PATH = firefox_profile
     PROF_PATH = "/home/linuser/.mozilla/firefox/xpdj4t5a.default"
 
-    if firefox_profile:
-        profile = webdriver.FirefoxProfile(profile_directory=PROF_PATH)
-    else:
-        profile = None
+    # if firefox_profile:
+    #     profile = webdriver.FirefoxProfile(profile_directory=PROF_PATH)
+    # else:
+    #     profile = None
 
-    ff_options = webdriver.FirefoxOptions()
-    ff_options.add_argument("--connect-existing")
-    ff_options.add_argument("--headless")
+    # ff_options = webdriver.FirefoxOptions()
+    # ff_options.add_argument("--connect-existing")
+    # ff_options.add_argument("--headless")
 
-    driver = webdriver.Firefox(
-        executable_path=WEBDRIVER_PATH, firefox_profile=profile, options=ff_options
-    )
+    # driver = webdriver.Firefox(
+    #     executable_path=WEBDRIVER_PATH, firefox_profile=profile, options=ff_options
+    # )
 
-    driver.get("http://youtube.com/")
+    # driver.get("http://youtube.com/")
 
-    src = driver.find_element_by_tag_name("html").get_attribute("outerHTML")
-    driver.quit()
+    # src = driver.find_element_by_tag_name("html").get_attribute("outerHTML")
+    # driver.quit()
 
-    f = open("yt.html", "w")
-    f.write(src)
+    # f = open("yt.html", "w")
+    # f.write(src)
+    # f.close()
+
+    # stub for now
+    f = open("yt.html", "r")
+    src = f.read()
     f.close()
 
     soup = BeautifulSoup(src, "html.parser")
+
+    # Get rid of "COVID-19 news" section
+    for descendant in soup.select(
+        "ytd-rich-section-renderer.style-scope:nth-child(14) > div:nth-child(1)"
+    ):
+        descendant.decompose()
+
+    f = open("yt2.html", "w")
+    f.write(str(soup))
+    f.close()
+
     return [tag.get("title") for tag in soup.findAll("a", {"id": "video-title-link"})]
 
