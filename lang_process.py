@@ -12,7 +12,7 @@ class TitleProcessor:
         self.lang_guesses = []
         nltk.data.path.append(nltk_path)
 
-    def _guessLanguage(self):
+    def _guessLanguages(self):
         textcat = TextCat()
         for title in self.title_list:
             lang = textcat.guess_language(title)
@@ -23,7 +23,7 @@ class TitleProcessor:
             if title_lang[1] in self.languages:
                 self.processed.append(title_lang[0])
 
-    def cleanTitles(self, title_list):
+    def _cleanTitles(self, title_list):
         """Clean titles of punctuation
 
         Args:
@@ -32,5 +32,5 @@ class TitleProcessor:
         pass
 
     def processTitles(self):
-        self._guessLanguage()
+        self._guessLanguages()
         self._filterUndesiredLang()
