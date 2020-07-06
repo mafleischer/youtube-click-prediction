@@ -3,6 +3,7 @@ import sys
 
 import nltk
 from nltk.classify import TextCat
+from nltk.corpus import stopwords
 
 from ytscrape import getYTTitles
 from lang_process import TitleProcessor
@@ -18,14 +19,7 @@ if __name__ == "__main__":
     titles = getYTTitles(WEBDRIVER_PATH, PROF_PATH)
     print(titles)
 
-    # nltk.data.path.append("/home/linuser/data/utils/nltk/")
-
-    # textcat = TextCat()
-    # for title in titles:
-    #     print(textcat.guess_language(title))
-
     title_processor = TitleProcessor(titles, LANGS, NLTK_PATH)
     title_processor.processTitles()
 
     print(title_processor.processed)
-    print(title_processor.lang_guesses)
