@@ -119,7 +119,7 @@ class TitleProcessor:
             for t in range(len(toks)):
                 if toks[t].isalnum():
                     lang = LANG_MAP[self.selection_langs[i]]
-                    if toks[t] not in stopwords.words(lang):
+                    if toks[t].lower() not in stopwords.words(lang):
                         filtered_toks.append(toks[t])
             lemmatized = [
                 tok.lower() for tok in self._lemmatizeTokens(filtered_toks, lang)
