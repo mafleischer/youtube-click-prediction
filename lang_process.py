@@ -28,6 +28,9 @@ class TitleProcessor:
             self.lang_guesses.append(lang)
 
     def _filterDesiredLang(self):
+        """Only include titles for processing of which the
+        language is in self.languages.
+        """
         for i in range(len(self.title_list)):
             if self.lang_guesses[i] in self.languages:
                 self.processed.append(self.title_list[i])
@@ -46,6 +49,15 @@ class TitleProcessor:
         # TODO:
 
     def _nltkTag2WordnetTag(self, nltk_tag):
+        """Return corresponding wordnet POS tag
+        to nltk.pos_tag tag.
+
+        Args:
+            nltk_tag (str): tag in tuple obtained by pos_tag call
+
+        Returns:
+            str: wordnet tag
+        """
         if nltk_tag.startswith("J"):
             return wordnet.ADJ
         elif nltk_tag.startswith("V"):
@@ -58,6 +70,17 @@ class TitleProcessor:
             return None
 
     def _lemmatizeTokens(self, tokens, lang):
+        """Lemmatize list of tokens in language lang.
+
+        Return lemmatized as list.
+
+        Args:
+            tokens (list): list of tokens
+            lang (str): language the tokens are in
+
+        Returns:
+            list: list of strings
+        """
         lemmatizer = WordNetLemmatizer()
         hanta = HanoverTagger.HanoverTagger("morphmodel_ger.pgz")
         # tokenize the sentence and find the POS tag for each token
@@ -83,6 +106,13 @@ class TitleProcessor:
         return lemmatized
 
     def _tokenizeFilterLemma(self):
+        """Tokenize, filter non-alnum strings, call
+        lemmatizing function, make lower case
+
+        TODO: call the other filter function which will
+        filter on other criteria: keep words like R&B as a
+        token.
+        """
         for i in range(len(self.processed)):
             toks = word_tokenize(self.processed[i])
             filtered_toks = []
