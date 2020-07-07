@@ -38,7 +38,7 @@ import os
 
 def getYTTitles(webdriver_path, firefox_profile=None):
     """Scrape the titles of the thumbnails in the youtube
-    title page.
+    home page (signed out).
 
     Args:
         webdriver_path (str): path to geckodriver
