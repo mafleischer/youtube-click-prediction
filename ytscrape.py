@@ -10,6 +10,7 @@ import time
 import urllib3
 import requests
 import os
+import re
 import sqlite3
 
 # problem with chromium, error message
@@ -93,8 +94,38 @@ def getTNVideoInfo(webdriver_path, firefox_profile=None):
     f.write(str(soup))
     f.close()
 
-    return [
-        (tag.get("href"), tag.get("title"))
-        for tag in soup.findAll("a", {"id": "video-title-link"})
-    ]
+    # details = soup.findAll("a", {"id" : "avatar-link"})
+
+    # info = []
+    # for detail in details:
+    #     channel = detail.get("title")
+    #     channel_link = detail.get("href")
+    #     link_tag = detail.findChildren("a", {"id": "video-title-link"}
+
+    a_title = soup.findAll("a", {"id": "video-title-link"})
+
+    link = [tag.get("href") for tag in a_title]
+    title = [tag.get("title") for tag in a_title]
+
+    a_channel = soup.select(
+        "ytd-rich-item-renderer.ytd-rich-grid-renderer > div > ytd-rich-grid-video-renderer > div > div > div > ytd-video-meta-block > div > div > ytd-channel-name > div > div > yt-formatted-string > a:nth-child(1)"
+    )
+    channel = [a.text for a in a_channel]
+
+    spans_views = soup.select(
+        "ytd-rich-item-renderer.ytd-rich-grid-renderer > div > ytd-rich-grid-video-renderer > div > div > div > ytd-video-meta-block > div > div > span:nth-child(1)"
+    )
+    views = [span.text for span in spans_views]
+
+    spans_uploaded_time = soup.select(
+        "ytd-rich-item-renderer.ytd-rich-grid-renderer > div > ytd-rich-grid-video-renderer > div > div > div > ytd-video-meta-block > div > div > span:nth-child(2)"
+    )
+    uploaded_time = [span.text for span in spans_uploaded_time]
+
+    return list(zip(link, title, channel, views, uploaded_time))
+
+    # return [
+    #     (vid_details.get("href"), vid_details.get("title"), details.)
+    #     for tag in soup.findAll("a", {"id": "video-title-link"})
+    # ]
 
