@@ -11,7 +11,6 @@ import urllib3
 import requests
 import os
 import re
-import sqlite3
 
 # problem with chromium, error message
 # WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/chromedriver"
@@ -94,16 +93,7 @@ def getTNVideoInfo(webdriver_path, firefox_profile=None):
     f.write(str(soup))
     f.close()
 
-    # details = soup.findAll("a", {"id" : "avatar-link"})
-
-    # info = []
-    # for detail in details:
-    #     channel = detail.get("title")
-    #     channel_link = detail.get("href")
-    #     link_tag = detail.findChildren("a", {"id": "video-title-link"}
-
     a_title = soup.findAll("a", {"id": "video-title-link"})
-
     link = [tag.get("href") for tag in a_title]
     title = [tag.get("title") for tag in a_title]
 
@@ -122,10 +112,53 @@ def getTNVideoInfo(webdriver_path, firefox_profile=None):
     )
     uploaded_time = [span.text for span in spans_uploaded_time]
 
+    # process number strings in views
+
+    pat_num = re.compile("[0-9]*(?:\.[0-9]*)?")
+    pat_k = re.compile("K")
+    pat_m = re.compile("M")
+    for i in range(len(views)):
+        vstr = views[i]
+        num = float(pat_num.match(vstr).group())
+        k = pat_k.search(vstr)
+        m = pat_m.search(vstr)
+        if k:
+            num *= 1000
+        elif m:
+            num *= 1000000
+        views[i] = int(num)
+
+    # convert uploaded time strings to number of hours
+
+    pat_num = re.compile("[0-9]*")
+    pat_min = re.compile("minutes")
+    pat_hrs = re.compile("hour[s]?")
+    pat_d = re.compile("day[s]?")
+    pat_we = re.compile("week[s]?")
+    pat_mon = re.compile("month[s]?")
+    pat_yrs = re.compile("year[s]?")
+
+    for i in range(len(uploaded_time)):
+        tstr = uploaded_time[i]
+        num = int(pat_num.match(tstr).group())
+        mins = pat_min.search(tstr)
+        hrs = pat_hrs.search(tstr)
+        d = pat_d.search(tstr)
+        we = pat_we.search(tstr)
+        mon = pat_mon.search(tstr)
+        yrs = pat_yrs.search(tstr)
+        if mins:
+            num = 0
+        elif hrs:
+            pass
+        elif d:
+            num *= 24
+        elif we:
+            num *= 24 * 7
+        elif mon:
+            num *= 24 * 31
+        elif yrs:
+            num *= 24 * 365
+        uploaded_time[i] = num
+
     return list(zip(link, title, channel, views, uploaded_time))
-
-    # return [
-    #     (vid_details.get("href"), vid_details.get("title"), details.)
-    #     for tag in soup.findAll("a", {"id": "video-title-link"})
-    # ]
-
