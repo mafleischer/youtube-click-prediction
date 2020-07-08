@@ -10,6 +10,7 @@ import time
 import urllib3
 import requests
 import os
+import sqlite3
 
 # problem with chromium, error message
 # WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/chromedriver"
@@ -36,7 +37,7 @@ import os
 # )
 
 
-def getYTTitles(webdriver_path, firefox_profile=None):
+def getTNVideoInfo(webdriver_path, firefox_profile=None):
     """Scrape the titles of the thumbnails in the youtube
     home page (signed out).
 
@@ -46,7 +47,7 @@ def getYTTitles(webdriver_path, firefox_profile=None):
         little sense for now. Defaults to None.
 
     Returns:
-        list: List of title strings
+        list: List of tuples: (link, title string)
     """
 
     WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
@@ -92,5 +93,8 @@ def getYTTitles(webdriver_path, firefox_profile=None):
     f.write(str(soup))
     f.close()
 
-    return [tag.get("title") for tag in soup.findAll("a", {"id": "video-title-link"})]
+    return [
+        (tag.get("href"), tag.get("title"))
+        for tag in soup.findAll("a", {"id": "video-title-link"})
+    ]
 
