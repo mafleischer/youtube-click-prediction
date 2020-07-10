@@ -43,27 +43,6 @@ class TitleProcessor:
                 self.processed.append(self.title_list[i])
                 self.selection_langs.append(self.lang_guesses[i])
 
-    # def _tokenizeFilterLemma(self):
-    #     """Tokenize, filter non-alnum strings, call
-    #     lemmatizing function, make lower case
-
-    #     TODO: call the other filter function which will
-    #     filter on other criteria: keep words like R&B as a
-    #     token.
-    #     """
-    #     for i in range(len(self.processed)):
-    #         toks = word_tokenize(self.processed[i])
-    #         filtered_toks = []
-    #         for t in range(len(toks)):
-    #             if toks[t].isalnum():
-    #                 lang = LANG_MAP[self.selection_langs[i]]
-    #                 if toks[t].lower() not in stopwords.words(lang):
-    #                     filtered_toks.append(toks[t])
-    #         lemmatized = [
-    #             tok.lower() for tok in self._lemmatizeTokens(filtered_toks, lang)
-    #         ]
-    #         self.processed[i] = lemmatized
-
     def _tokenizeAlnum(self):
         for i in range(len(self.processed)):
             toks = word_tokenize(self.processed[i])
