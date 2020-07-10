@@ -30,6 +30,8 @@ class TitleProcessor:
         textcat = TextCat()
         for title in self.title_list:
             lang = textcat.guess_language(title)
+            # strangely guess_language puts a space at the end sometimes
+            lang = lang.rstrip()
             self.lang_guesses.append(lang)
 
     def _filterDesiredLang(self):
