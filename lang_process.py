@@ -18,7 +18,7 @@ class TitleProcessor:
         self.languages = languages
         # guesses for all titles; kind of for debug purposes
         self.lang_guesses = []
-        # the languages of the titles in self.processed
+        self.selection = []
         self.selection_langs = []
         nltk.data.path.append(nltk_data)
         self.lemmatizers = {
@@ -40,8 +40,9 @@ class TitleProcessor:
         """
         for i in range(len(self.title_list)):
             if self.lang_guesses[i] in self.languages:
-                self.processed.append(self.title_list[i])
+                self.selection.append(self.title_list[i])
                 self.selection_langs.append(self.lang_guesses[i])
+                self.processed.append(self.title_list[i])
 
     def _tokenizeAlnum(self):
         for i in range(len(self.processed)):
