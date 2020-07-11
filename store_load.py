@@ -40,9 +40,9 @@ class DB:
 
     def insertYTRawRecord(self, record):
         # better avoid hardcoding place of title in record?
-        title_ix = list(self.yt_raw_cols.keys()).index("title")
-        title = record[title_ix]
-        if self.isTitleInDB(title):
+        link_ix = list(self.yt_raw_cols.keys()).index("link")
+        link = record[link_ix]
+        if self.isLinkInDB(link):
             return
 
         sql_insert_raw = """INSERT INTO {}({}, {}, {}, {}, {}, {})
@@ -61,9 +61,9 @@ class DB:
     def updateRecordTarget(self, title):
         pass
 
-    def isTitleInDB(self, title):
+    def isLinkInDB(self, link):
         sql_select_where_raw = """SELECT {0} FROM {1} WHERE {0} = '{2}';""".format(
-            self.yt_raw_cols["title"], self.yttable_raw, title
+            self.yt_raw_cols["link"], self.yttable_raw, link
         )
         cursor = self.db_con.cursor()
         cursor.execute(sql_select_where_raw)
