@@ -16,12 +16,25 @@ class DB:
             "uploaded_time": "uploaded_hrs_ago",
             "target": "clicked",
         }
+
+        # store all this to be able to assess multiple approaches
+        # with the NLP/ML models, and to do those operations only once
+        self.yttable_proc_titles = "processed_titles"
+        self.yt_proc_cols = {
+            "tok_pure": "token_pure",
+            "no_stop": "no_stopwords",
+            "lemma": "lemmatized",
+        }
         if os.path.isfile(db_file):
             self.db_con = sqlite3.connect(db_file)
         else:
             print("db created")
             self.db_con = sqlite3.connect(db_file)
             self._dbInit()
+
+    def __del__(self):
+        self.db_con.commit()
+        self.db_con.close()
 
     def _dbInit(self):
         cursor = self.db_con.cursor()
@@ -36,7 +49,16 @@ class DB:
                                 """.format(
             self.yttable_raw, *self.yt_raw_cols.values()
         )
+        sql_create_table_titles_proc = """ CREATE TABLE IF NOT EXISTS {} (
+                                        id integer PRIMARY KEY,
+                                        {} text NOT NULL,
+                                        {} text NOT NULL,
+                                        {} text NOT NULL);
+                                """.format(
+            self.yttable_proc_titles, *self.yt_proc_cols.values()
+        )
         cursor.execute(sql_create_table_ytraw)
+        cursor.execute(sql_create_table_titles_proc)
 
     def insertYTRawRecord(self, record):
         # better avoid hardcoding place of title in record?
@@ -58,7 +80,17 @@ class DB:
         cursor.execute(sql_select_all_raw)
         return cursor.fetchall()
 
-    def updateRecordTarget(self, title):
+    def insertProcessedRecord(self, record):
+        args = [" ".join(l) for l in record]
+
+        sql_insert_proc = """INSERT INTO {}({}, {}, {})
+                            VALUES('{}','{}','{}')""".format(
+            self.yttable_proc_titles, *self.yt_proc_cols.values(), *args
+        )
+        cursor = self.db_con.cursor()
+        cursor.execute(sql_insert_proc)
+
+    def updateRecordTarget(self, link):
         pass
 
     def isLinkInDB(self, link):

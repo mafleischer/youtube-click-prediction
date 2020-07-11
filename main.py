@@ -34,3 +34,5 @@ if __name__ == "__main__":
 
     rows = db.loadRaw()
     print(rows)
+
+    db.insertProcessedRecord([["asda", "asdsd"], ["rrrrr", "rteret"], ["sdfd", "yyyy"]])
