@@ -68,11 +68,11 @@ class DB:
             return
 
         sql_insert_raw = """INSERT INTO {}({}, {}, {}, {}, {}, {})
-                            VALUES('{}','{}','{}',{},{},{})""".format(
-            self.yttable_raw, *self.yt_raw_cols.values(), *record, 0
+                            VALUES(?,?,?,?,?,?)""".format(
+            self.yttable_raw, *self.yt_raw_cols.values()
         )
         cursor = self.db_con.cursor()
-        cursor.execute(sql_insert_raw)
+        cursor.execute(sql_insert_raw, record)
 
     def loadRaw(self, cols="*"):
         sql_select_all_raw = """SELECT {} FROM {};""".format(cols, self.yttable_raw)
@@ -81,14 +81,12 @@ class DB:
         return cursor.fetchall()
 
     def insertProcessedRecord(self, record):
-        args = [" ".join(l) for l in record]
-
         sql_insert_proc = """INSERT INTO {}({}, {}, {})
-                            VALUES('{}','{}','{}')""".format(
-            self.yttable_proc_titles, *self.yt_proc_cols.values(), *args
+                            VALUES(?,?,?)""".format(
+            self.yttable_proc_titles, *self.yt_proc_cols.values()
         )
         cursor = self.db_con.cursor()
-        cursor.execute(sql_insert_proc)
+        cursor.execute(sql_insert_proc, record)
 
     def updateRecordTarget(self, link):
         pass

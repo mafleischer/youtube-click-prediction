@@ -35,4 +35,7 @@ if __name__ == "__main__":
     rows = db.loadRaw()
     print(rows)
 
-    db.insertProcessedRecord([["asda", "asdsd"], ["rrrrr", "rteret"], ["sdfd", "yyyy"]])
+    proc = tuple(
+        " ".join(t) for t in [["asda", "asdsd"], ["rrrrr", "rteret"], ["sdfd", "yyyy"]]
+    )
+    db.insertProcessedRecord(proc)
