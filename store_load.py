@@ -37,7 +37,6 @@ class DB:
         self.db_con.close()
 
     def _dbInit(self):
-        cursor = self.db_con.cursor()
         sql_create_table_ytraw = """ CREATE TABLE IF NOT EXISTS {} (
                                         id integer PRIMARY KEY,
                                         {} text NOT NULL UNIQUE,
@@ -57,21 +56,19 @@ class DB:
                                 """.format(
             self.yttable_proc_titles, *self.yt_proc_cols.values()
         )
-        cursor.execute(sql_create_table_ytraw)
-        cursor.execute(sql_create_table_titles_proc)
+        self.db_con.execute(sql_create_table_ytraw)
+        self.db_con.execute(sql_create_table_titles_proc)
 
     def insertYTRawRecords(self, records):
         sql_insert_raw = """INSERT OR IGNORE INTO {}({}, {}, {}, {}, {}, {})
                             VALUES(?,?,?,?,?,?)""".format(
             self.yttable_raw, *self.yt_raw_cols.values()
         )
-        cursor = self.db_con.cursor()
-        cursor.executemany(sql_insert_raw, records)
+        self.db_con.executemany(sql_insert_raw, records)
 
     def loadRaw(self, cols="*"):
         sql_select_all_raw = """SELECT {} FROM {};""".format(cols, self.yttable_raw)
-        cursor = self.db_con.cursor()
-        cursor.execute(sql_select_all_raw)
+        cursor = self.db_con.execute(sql_select_all_raw)
         return cursor.fetchall()
 
     def insertProcessedRecords(self, records):
@@ -79,8 +76,7 @@ class DB:
                             VALUES(?,?,?)""".format(
             self.yttable_proc_titles, *self.yt_proc_cols.values()
         )
-        cursor = self.db_con.cursor()
-        cursor.executemany(sql_insert_proc, records)
+        self.db_con.executemany(sql_insert_proc, records)
 
     def updateRecordTarget(self, link):
         pass
@@ -89,8 +85,7 @@ class DB:
         sql_select_where_raw = """SELECT {0} FROM {1} WHERE {0} = '{2}';""".format(
             self.yt_raw_cols["link"], self.yttable_raw, link
         )
-        cursor = self.db_con.cursor()
-        cursor.execute(sql_select_where_raw)
+        cursor = self.db_con.execute(sql_select_where_raw)
         row = cursor.fetchall()
         if row:
             return True
