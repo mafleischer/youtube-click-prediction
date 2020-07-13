@@ -51,4 +51,4 @@ if __name__ == "__main__":
     proc = tuple(
         " ".join(t) for t in [["asda", "asdsd"], ["rrrrr", "rteret"], ["sdfd", "yyyy"]]
     )
-    db.insertProcessedRecord(proc)
+    db.insertProcessedRecords([proc])

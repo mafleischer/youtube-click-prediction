@@ -74,13 +74,13 @@ class DB:
         cursor.execute(sql_select_all_raw)
         return cursor.fetchall()
 
-    def insertProcessedRecord(self, record):
+    def insertProcessedRecords(self, records):
         sql_insert_proc = """INSERT INTO {}({}, {}, {})
                             VALUES(?,?,?)""".format(
             self.yttable_proc_titles, *self.yt_proc_cols.values()
         )
         cursor = self.db_con.cursor()
-        cursor.execute(sql_insert_proc, record)
+        cursor.executemany(sql_insert_proc, records)
 
     def updateRecordTarget(self, link):
         pass
