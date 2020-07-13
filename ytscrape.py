@@ -161,4 +161,5 @@ def getTNVideoInfo(webdriver_path, firefox_profile=None):
             num *= 24 * 365
         uploaded_time[i] = num
 
-    return list(zip(link, title, channel, views, uploaded_time))
+    all_targets_0 = [0] * len(link)
+    return list(zip(link, title, channel, views, uploaded_time, all_targets_0))
