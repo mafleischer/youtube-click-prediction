@@ -60,13 +60,13 @@ class DB:
         cursor.execute(sql_create_table_ytraw)
         cursor.execute(sql_create_table_titles_proc)
 
-    def insertYTRawRecord(self, record):
-        sql_insert_raw = """INSERT INTO {}({}, {}, {}, {}, {}, {})
+    def insertYTRawRecords(self, records):
+        sql_insert_raw = """INSERT OR IGNORE INTO {}({}, {}, {}, {}, {}, {})
                             VALUES(?,?,?,?,?,?)""".format(
             self.yttable_raw, *self.yt_raw_cols.values()
         )
         cursor = self.db_con.cursor()
-        cursor.execute(sql_insert_raw, record)
+        cursor.executemany(sql_insert_raw, records)
 
     def loadRaw(self, cols="*"):
         sql_select_all_raw = """SELECT {} FROM {};""".format(cols, self.yttable_raw)

@@ -27,8 +27,23 @@ if __name__ == "__main__":
 
     print(title_processor.processed)
     db = DB()
-    for tup in tninfo:
-        db.insertYTRawRecord(tup)
+    # for tup in tninfo:
+    select = tninfo[:]
+    for i in range(len(tninfo)):
+        if tninfo[i][1] not in title_processor.selection:
+            del select[i]
+    db.insertYTRawRecords(select)
+    select.append(
+        (
+            "/watch?v=DUMMYBLABLA",
+            "Mdou Moctar - Tarhatazed (Live on KEXP)",
+            "KEXP",
+            1200000,
+            8760,
+            0,
+        )
+    )
+    db.insertYTRawRecords(select)
 
     rows = db.loadRaw()
     print(rows)
