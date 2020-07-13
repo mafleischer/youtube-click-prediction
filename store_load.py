@@ -40,7 +40,7 @@ class DB:
         cursor = self.db_con.cursor()
         sql_create_table_ytraw = """ CREATE TABLE IF NOT EXISTS {} (
                                         id integer PRIMARY KEY,
-                                        {} text NOT NULL,
+                                        {} text NOT NULL UNIQUE,
                                         {} text NOT NULL,
                                         {} text NOT NULL,
                                         {} integer NOT NULL,
@@ -61,12 +61,6 @@ class DB:
         cursor.execute(sql_create_table_titles_proc)
 
     def insertYTRawRecord(self, record):
-        # better avoid hardcoding place of title in record?
-        link_ix = list(self.yt_raw_cols.keys()).index("link")
-        link = record[link_ix]
-        if self.isLinkInDB(link):
-            return
-
         sql_insert_raw = """INSERT INTO {}({}, {}, {}, {}, {}, {})
                             VALUES(?,?,?,?,?,?)""".format(
             self.yttable_raw, *self.yt_raw_cols.values()

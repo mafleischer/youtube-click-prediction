@@ -28,9 +28,7 @@ if __name__ == "__main__":
     print(title_processor.processed)
     db = DB()
     for tup in tninfo:
-        args = list(tup)
-        if args[1] in title_processor.selection:
-            db.insertYTRawRecord(args)
+        db.insertYTRawRecord(tup)
 
     rows = db.loadRaw()
     print(rows)
