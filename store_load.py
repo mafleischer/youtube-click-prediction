@@ -53,7 +53,7 @@ class DB:
 
         sql_create_table_titles_proc = """CREATE TABLE IF NOT EXISTS {0} (
                                         id INTEGER PRIMARY KEY,
-                                        {1} TEXT NOT NULL,
+                                        {1} TEXT NOT NULL UNIQUE,
                                         {2} TEXT NOT NULL,
                                         {3} TEXT NOT NULL,
                                         {4} TEXT NOT NULL,
@@ -81,7 +81,7 @@ class DB:
         return cursor.fetchall()
 
     def insertProcessedRecords(self, records):
-        sql_insert_proc = """INSERT INTO {}({}, {}, {}, {})
+        sql_insert_proc = """INSERT OR IGNORE INTO {}({}, {}, {}, {})
                             VALUES(?,?,?,?)""".format(
             self.yttable_proc_titles,
             self.yt_raw_cols["link"],
