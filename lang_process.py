@@ -34,17 +34,19 @@ class TitleProcessor:
             lang = lang.rstrip()
             self.lang_guesses.append(lang)
 
-    def _filterDesiredLang(self):
+    def filterDesiredLang(self):
         """Only include titles for processing of which the
-        language is in self.languages.
+        language is in self.languages, created by _guessLanguages().
         """
+        self._guessLanguages()
+
         for i in range(len(self.title_list)):
             if self.lang_guesses[i] in self.languages:
                 self.selection.append(self.title_list[i])
                 self.selection_langs.append(self.lang_guesses[i])
                 self.processed.append(self.title_list[i])
 
-    def _tokenizeAlnum(self):
+    def tokenizeAlnum(self):
         for i in range(len(self.processed)):
             toks = word_tokenize(self.processed[i])
             filtered_toks = []
@@ -53,7 +55,7 @@ class TitleProcessor:
                     filtered_toks.append(toks[t])
             self.processed[i] = filtered_toks
 
-    def _tokenizeExceptions(self):
+    def tokenizeExceptions(self):
         """In a *single* title sort out words/terms to keep as tokens
         that have non-alphanumeric characters in them. E.g. R&B.
 
@@ -65,7 +67,7 @@ class TitleProcessor:
         suffix = "%'\")"
         # TODO:
 
-    def _removeStopwords(self):
+    def removeStopwords(self):
         for i in range(len(self.processed)):
             toks = self.processed[i]
             filtered_toks = []
@@ -96,7 +98,7 @@ class TitleProcessor:
         else:
             return None
 
-    def _lemmatize(self):
+    def lemmatize(self):
         """Lemmatize all lists of tokens in self.processed.
         """
 
@@ -127,8 +129,7 @@ class TitleProcessor:
             self.processed[i] = lemmatized
 
     def processTitles(self):
-        self._guessLanguages()
-        self._filterDesiredLang()
-        self._tokenizeAlnum()
-        self._removeStopwords()
-        self._lemmatize()
+        self.filterDesiredLang()
+        self.tokenizeAlnum()
+        self.removeStopwords()
+        self.lemmatize()
