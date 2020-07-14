@@ -38,25 +38,34 @@ class DB:
 
     def _dbInit(self):
         sql_create_table_ytraw = """ CREATE TABLE IF NOT EXISTS {} (
-                                        id integer PRIMARY KEY,
-                                        {} text NOT NULL UNIQUE,
-                                        {} text NOT NULL,
-                                        {} text NOT NULL,
-                                        {} integer NOT NULL,
-                                        {} integer NOT NULL,
-                                        {} integer NOT NULL);
+                                        id INTEGER PRIMARY KEY,
+                                        {} TEXT NOT NULL UNIQUE,
+                                        {} TEXT NOT NULL,
+                                        {} TEXT NOT NULL,
+                                        {} INTEGER NOT NULL,
+                                        {} INTEGER NOT NULL,
+                                        {} INTEGER NOT NULL);
                                 """.format(
             self.yttable_raw, *self.yt_raw_cols.values()
         )
-        sql_create_table_titles_proc = """ CREATE TABLE IF NOT EXISTS {} (
-                                        id integer PRIMARY KEY,
-                                        {} text NOT NULL,
-                                        {} text NOT NULL,
-                                        {} text NOT NULL);
+
+        sql_pragma_foreign = "PRAGMA foreign_keys = ON;"
+
+        sql_create_table_titles_proc = """CREATE TABLE IF NOT EXISTS {0} (
+                                        id INTEGER PRIMARY KEY,
+                                        {1} TEXT NOT NULL,
+                                        {2} TEXT NOT NULL,
+                                        {3} TEXT NOT NULL,
+                                        {4} TEXT NOT NULL,
+                                        FOREIGN KEY({1}) REFERENCES {5}({1}));
                                 """.format(
-            self.yttable_proc_titles, *self.yt_proc_cols.values()
+            self.yttable_proc_titles,
+            self.yt_raw_cols["link"],
+            *self.yt_proc_cols.values(),
+            self.yttable_raw,
         )
         self.db_con.execute(sql_create_table_ytraw)
+        self.db_con.execute(sql_pragma_foreign)
         self.db_con.execute(sql_create_table_titles_proc)
 
     def insertYTRawRecords(self, records):
@@ -72,9 +81,11 @@ class DB:
         return cursor.fetchall()
 
     def insertProcessedRecords(self, records):
-        sql_insert_proc = """INSERT INTO {}({}, {}, {})
-                            VALUES(?,?,?)""".format(
-            self.yttable_proc_titles, *self.yt_proc_cols.values()
+        sql_insert_proc = """INSERT INTO {}({}, {}, {}, {})
+                            VALUES(?,?,?,?)""".format(
+            self.yttable_proc_titles,
+            self.yt_raw_cols["link"],
+            *self.yt_proc_cols.values(),
         )
         self.db_con.executemany(sql_insert_proc, records)
 

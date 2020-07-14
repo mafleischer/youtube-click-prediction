@@ -48,7 +48,8 @@ if __name__ == "__main__":
     rows = db.loadRaw()
     print(rows)
 
-    proc = tuple(
+    proc = ("/watch?v=IQwqmutHqWA",) + tuple(
         " ".join(t) for t in [["asda", "asdsd"], ["rrrrr", "rteret"], ["sdfd", "yyyy"]]
     )
+
     db.insertProcessedRecords([proc])
