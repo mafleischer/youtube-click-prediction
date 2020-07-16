@@ -21,6 +21,7 @@ class DB:
         # with the NLP/ML models, and to do those operations only once
         self.yttable_proc_titles = "processed_titles"
         self.yt_proc_cols = {
+            "link": "href",
             "tok_pure": "token_pure",
             "no_stop": "no_stopwords",
             "lemma": "lemmatized",
@@ -75,11 +76,6 @@ class DB:
         )
         self.db_con.executemany(sql_insert_raw, records)
 
-    def loadRaw(self, cols="*"):
-        sql_select_all_raw = """SELECT {} FROM {};""".format(cols, self.yttable_raw)
-        cursor = self.db_con.execute(sql_select_all_raw)
-        return cursor.fetchall()
-
     def insertProcessedRecords(self, records):
         sql_insert_proc = """INSERT OR IGNORE INTO {}({}, {}, {}, {})
                             VALUES(?,?,?,?)""".format(
@@ -89,8 +85,23 @@ class DB:
         )
         self.db_con.executemany(sql_insert_proc, records)
 
-    def updateRecordTarget(self, link):
-        pass
+    def loadRaw(self, cols="*"):
+        sql_select_all_raw = """SELECT {} FROM {};""".format(cols, self.yttable_raw)
+        cursor = self.db_con.execute(sql_select_all_raw)
+        return cursor.fetchall()
+
+    def loadProcessed(self, cols="*"):
+        sql_select_all_raw = """SELECT {} FROM {};""".format(
+            cols, self.yttable_proc_titles
+        )
+        cursor = self.db_con.execute(sql_select_all_raw)
+        return cursor.fetchall()
+
+    def updateClicked(self, link):
+        sql_update = """UPDATE {} SET {} = 1 WHERE {} = ?;""".format(
+            self.yttable_raw, self.yt_raw_cols["target"], self.yt_raw_cols["link"]
+        )
+        self.db_con.execute(sql_update, link)
 
     def isLinkInDB(self, link):
         sql_select_where_raw = """SELECT {0} FROM {1} WHERE {0} = '{2}';""".format(

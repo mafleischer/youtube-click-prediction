@@ -5,6 +5,9 @@ import nltk
 from nltk.classify import TextCat
 from nltk.corpus import stopwords
 
+from gensim.models import Word2Vec
+from nltk.corpus import brown, treebank, movie_reviews
+
 from store_load import DB
 from ytscrape import getTNVideoInfo
 from lang_process import TitleProcessor
@@ -15,7 +18,7 @@ NLTK_DATA = "/home/linuser/data/utils/nltk/"
 LANGS = ["eng", "deu"]
 
 
-def stepThrough(records):
+def processWriteToDB(records, db):
     """Do all the steps with records.
 
     1. Check for already seen links, delete seen.
@@ -26,8 +29,6 @@ def stepThrough(records):
     Args:
         records (list): List of tuples, obtained from getTNVideoInfo
     """
-
-    db = DB()
 
     i = 0
     end = len(records)
@@ -67,9 +68,22 @@ def stepThrough(records):
 if __name__ == "__main__":
     # if len(sys.argv) < 2:
     #     print("{} [path to webdriver binary] [path to firefox profile]".format(sys.argv[0]))
-    tninfo = getTNVideoInfo(WEBDRIVER_PATH, PROF_PATH)
 
-    stepThrough(tninfo)
+    # tninfo = getTNVideoInfo(WEBDRIVER_PATH, PROF_PATH)
+
+    db = DB()
+
+    # processWriteToDB(tninfo, db)
+    processed = db.loadProcessed(
+        db.yt_proc_cols["lemma"] + ", " + db.yt_proc_cols["link"]
+    )
+    lemmas = [s[0].split() for s in processed]
+    print(processed)
+    w2v = Word2Vec(lemmas, min_count=1)
+    print(w2v.wv.most_similar("best"))
+
+    # tmp update clicked videos
+    db.updateClicked(("/watch?v=idfv7Lw4Y_s",))
 
     # titles = [tup[1] for tup in tninfo]
     # print(tninfo)
