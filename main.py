@@ -9,7 +9,7 @@ from gensim.models import Word2Vec
 from nltk.corpus import brown, treebank, movie_reviews
 
 from store_load import DB
-from ytscrape import getTNVideoInfo
+from ytscrape import Browser, getTNVideoInfo
 from lang_process import TitleProcessor
 
 WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
@@ -28,6 +28,7 @@ def processWriteToDB(records, db):
 
     Args:
         records (list): List of tuples, obtained from getTNVideoInfo
+        db (DB): DB object
     """
 
     i = 0
@@ -69,7 +70,8 @@ if __name__ == "__main__":
     # if len(sys.argv) < 2:
     #     print("{} [path to webdriver binary] [path to firefox profile]".format(sys.argv[0]))
 
-    # tninfo = getTNVideoInfo(WEBDRIVER_PATH, PROF_PATH)
+    browser = Browser(WEBDRIVER_PATH, PROF_PATH)
+    tninfo = getTNVideoInfo(browser)
 
     db = DB()
 
@@ -78,12 +80,22 @@ if __name__ == "__main__":
         db.yt_proc_cols["lemma"] + ", " + db.yt_proc_cols["link"]
     )
     lemmas = [s[0].split() for s in processed]
-    print(processed)
-    w2v = Word2Vec(lemmas, min_count=1)
-    print(w2v.wv.most_similar("best"))
+    # print(processed)
+    # w2v = Word2Vec(lemmas, min_count=1)
+    # print(w2v.wv.most_similar("best"))
 
     # tmp update clicked videos
     db.updateClicked(("/watch?v=idfv7Lw4Y_s",))
+    db.updateClicked(("/watch?v=LJRTINVFZDM",))
+    db.updateClicked(("/watch?v=1bzwYn8MGTs",))
+    db.updateClicked(("/watch?v=lzPgYkUBgIQ",))
+    db.updateClicked(("/watch?v=nmihGvY8NIk",))
+    db.updateClicked(("/watch?v=IQwqmutHqWA",))
+    db.updateClicked(("/watch?v=gdvMPPVQ7vY",))
+    db.updateClicked(("/watch?v=BuVj73K_ak4",))
+    db.updateClicked(("/watch?v=HjUv0Zv0T8o",))
+
+    print(tninfo)
 
     # titles = [tup[1] for tup in tninfo]
     # print(tninfo)
