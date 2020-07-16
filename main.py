@@ -9,7 +9,7 @@ from gensim.models import Word2Vec
 from nltk.corpus import brown, treebank, movie_reviews
 
 from store_load import DB
-from ytscrape import Browser, getTNVideoInfo
+from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
 
 WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
@@ -71,7 +71,8 @@ if __name__ == "__main__":
     #     print("{} [path to webdriver binary] [path to firefox profile]".format(sys.argv[0]))
 
     browser = Browser(WEBDRIVER_PATH, PROF_PATH)
-    tninfo = getTNVideoInfo(browser)
+    scraper = Scraper(browser)
+    tninfo = scraper.getTNVideoInfo()
 
     db = DB()
 
