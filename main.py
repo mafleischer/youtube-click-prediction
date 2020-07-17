@@ -11,6 +11,7 @@ from nltk.corpus import brown, treebank, movie_reviews
 from store_load import DB
 from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
+from gui import GUI
 
 WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
 PROF_PATH = "/home/linuser/.mozilla/firefox/xpdj4t5a.default"
@@ -70,9 +71,9 @@ if __name__ == "__main__":
     # if len(sys.argv) < 2:
     #     print("{} [path to webdriver binary] [path to firefox profile]".format(sys.argv[0]))
 
-    browser = Browser(WEBDRIVER_PATH, PROF_PATH)
-    scraper = Scraper(browser)
-    tninfo = scraper.getTNVideoInfo()
+    # browser = Browser(WEBDRIVER_PATH, PROF_PATH)
+    # scraper = Scraper(browser)
+    # tninfo = scraper.getTNVideoInfo()
 
     db = DB()
 
@@ -96,7 +97,13 @@ if __name__ == "__main__":
     db.updateClicked(("/watch?v=BuVj73K_ak4",))
     db.updateClicked(("/watch?v=HjUv0Zv0T8o",))
 
-    print(tninfo)
+    # print(tninfo)
+
+    gui = GUI()
+    gui.run()
+
+    # el = browser.driver.find_element_by_link_text(tninfo[0][1])
+    # el.click()
 
     # titles = [tup[1] for tup in tninfo]
     # print(tninfo)
