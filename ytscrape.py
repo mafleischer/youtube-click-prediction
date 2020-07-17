@@ -54,7 +54,7 @@ class Browser:
             options=ff_options,
         )
 
-    def quit():
+    def __del__():
         self.driver.quit()
 
 
