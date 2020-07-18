@@ -1,6 +1,8 @@
 import os
 import sys
 
+import configparser
+
 import nltk
 from nltk.classify import TextCat
 from nltk.corpus import stopwords
@@ -13,67 +15,16 @@ from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
 from gui import GUI
 
-WEBDRIVER_PATH = "/home/linuser/data/utils/webdrivers/geckodriver"
-PROF_PATH = "/home/linuser/.mozilla/firefox/xpdj4t5a.default"
-NLTK_DATA = "/home/linuser/data/utils/nltk/"
-LANGS = ["eng", "deu"]
-
-
-def processWriteToDB(records, db):
-    """Do all the steps with records.
-
-    1. Check for already seen links, delete seen.
-    2. Filter languages. Delete records with not desired langs.
-    3. Language process the titles. Do each step of TitleProcessor
-    separately and write each of the results to DB.
-
-    Args:
-        records (list): List of tuples, obtained from getTNVideoInfo
-        db (DB): DB object
-    """
-
-    i = 0
-    end = len(records)
-    while i < end:
-        if db.isLinkInDB(records[i][0]):
-            del records[i]
-            end -= 1
-        else:
-            i += 1
-
-    title_processor = TitleProcessor([rec[1] for rec in records], LANGS, NLTK_DATA)
-    title_processor.filterDesiredLang()
-
-    i = 0
-    end = len(records)
-    while i < end:
-        if records[i][1] not in title_processor.selection:
-            del records[i]
-            end -= 1
-        else:
-            i += 1
-
-    db.insertYTRawRecords(records)
-
-    title_processor.tokenizeAlnum()
-    toks_pure = [" ".join(toklist) for toklist in title_processor.processed]
-    title_processor.removeStopwords()
-    no_stop = [" ".join(toklist) for toklist in title_processor.processed]
-    title_processor.lemmatize()
-    lemmas = [" ".join(toklist) for toklist in title_processor.processed]
-
-    db.insertProcessedRecords(
-        list(zip([rec[0] for rec in records], toks_pure, no_stop, lemmas))
-    )
-
-
 if __name__ == "__main__":
-    # if len(sys.argv) < 2:
-    #     print("{} [path to webdriver binary] [path to firefox profile]".format(sys.argv[0]))
+    config = configparser.ConfigParser()
+    config.read("CONFIG")
+    WEBDRIVER_PATH = config["SELENIUM"]["WEBDRIVER_PATH"]
+    PROF_PATH = config["SELENIUM"]["FF_PROF_PATH"]
+    NLTK_DATA = config["NLTK"]["NLTK_DATA"]
+    LANGS = config["PREFERENCES"]["LANGS"]
 
     # browser = Browser(WEBDRIVER_PATH, PROF_PATH)
     # scraper = Scraper(browser)
-    # tninfo = scraper.getTNVideoInfo()
 
     db = DB()
 
@@ -87,20 +38,20 @@ if __name__ == "__main__":
     # print(w2v.wv.most_similar("best"))
 
     # tmp update clicked videos
-    db.updateClicked(("/watch?v=idfv7Lw4Y_s",))
-    db.updateClicked(("/watch?v=LJRTINVFZDM",))
-    db.updateClicked(("/watch?v=1bzwYn8MGTs",))
-    db.updateClicked(("/watch?v=lzPgYkUBgIQ",))
-    db.updateClicked(("/watch?v=nmihGvY8NIk",))
-    db.updateClicked(("/watch?v=IQwqmutHqWA",))
-    db.updateClicked(("/watch?v=gdvMPPVQ7vY",))
-    db.updateClicked(("/watch?v=BuVj73K_ak4",))
-    db.updateClicked(("/watch?v=HjUv0Zv0T8o",))
+    # db.updateClicked(("/watch?v=idfv7Lw4Y_s",))
+    # db.updateClicked(("/watch?v=LJRTINVFZDM",))
+    # db.updateClicked(("/watch?v=1bzwYn8MGTs",))
+    # db.updateClicked(("/watch?v=lzPgYkUBgIQ",))
+    # db.updateClicked(("/watch?v=nmihGvY8NIk",))
+    # db.updateClicked(("/watch?v=IQwqmutHqWA",))
+    # db.updateClicked(("/watch?v=gdvMPPVQ7vY",))
+    # db.updateClicked(("/watch?v=BuVj73K_ak4",))
+    # db.updateClicked(("/watch?v=HjUv0Zv0T8o",))
 
     # print(tninfo)
 
-    gui = GUI()
-    gui.run()
+    # gui = GUI(scraper, db, LANGS, NLTK_DATA)
+    # gui.run()
 
     # el = browser.driver.find_element_by_link_text(tninfo[0][1])
     # el.click()
