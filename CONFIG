@@ -3,7 +3,7 @@ WEBDRIVER_PATH = /home/linuser/data/utils/webdrivers/geckodriver
 FF_PROF_PATH = /home/linuser/.mozilla/firefox/xpdj4t5a.default
 
 [NLTK]
-NLTK_DATA = "/home/linuser/data/utils/nltk/"
+NLTK_DATA = /home/linuser/data/utils/nltk/
 
 [PREFERENCES]
 LANGS = eng deu
