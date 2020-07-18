@@ -21,7 +21,7 @@ class DB:
         # with the NLP/ML models, and to do those operations only once
         self.yttable_proc_titles = "processed_titles"
         self.yt_proc_cols = {
-            "link": "href",
+            "link": self.yt_raw_cols["link"],
             "tok_pure": "token_pure",
             "no_stop": "no_stopwords",
             "lemma": "lemmatized",
@@ -60,10 +60,7 @@ class DB:
                                         {4} TEXT NOT NULL,
                                         FOREIGN KEY({1}) REFERENCES {5}({1}));
                                 """.format(
-            self.yttable_proc_titles,
-            self.yt_raw_cols["link"],
-            *self.yt_proc_cols.values(),
-            self.yttable_raw,
+            self.yttable_proc_titles, *self.yt_proc_cols.values(), self.yttable_raw,
         )
         self.db_con.execute(sql_create_table_ytraw)
         self.db_con.execute(sql_pragma_foreign)
@@ -79,9 +76,7 @@ class DB:
     def insertProcessedRecords(self, records):
         sql_insert_proc = """INSERT OR IGNORE INTO {}({}, {}, {}, {})
                             VALUES(?,?,?,?)""".format(
-            self.yttable_proc_titles,
-            self.yt_raw_cols["link"],
-            *self.yt_proc_cols.values(),
+            self.yttable_proc_titles, *self.yt_proc_cols.values(),
         )
         self.db_con.executemany(sql_insert_proc, records)
 
