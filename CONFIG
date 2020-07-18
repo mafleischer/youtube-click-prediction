@@ -6,4 +6,4 @@ FF_PROF_PATH = /home/linuser/.mozilla/firefox/xpdj4t5a.default
 NLTK_DATA = "/home/linuser/data/utils/nltk/"
 
 [PREFERENCES]
-LANGS = ["eng", "deu"]
+LANGS = eng deu

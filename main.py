@@ -21,8 +21,7 @@ if __name__ == "__main__":
     WEBDRIVER_PATH = config["SELENIUM"]["WEBDRIVER_PATH"]
     PROF_PATH = config["SELENIUM"]["FF_PROF_PATH"]
     NLTK_DATA = config["NLTK"]["NLTK_DATA"]
-    LANGS = config["PREFERENCES"]["LANGS"]
-
+    LANGS = config["PREFERENCES"]["LANGS"].split()
     # browser = Browser(WEBDRIVER_PATH, PROF_PATH)
     # scraper = Scraper(browser)
 
