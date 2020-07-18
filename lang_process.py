@@ -7,20 +7,25 @@ from nltk.stem import WordNetLemmatizer
 from HanTa import HanoverTagger
 from gensim.models import Word2Vec
 
+from config import Config
+
 # for mapping of strings of Textcat guess to stopwords param
 LANG_MAP = {"eng": "english", "deu": "german"}
 
 
 class TitleProcessor:
-    def __init__(self, title_list, languages, nltk_data):
+    def __init__(self, title_list):
+        config = Config()
+        config.read()
+
         self.title_list = title_list
         self.processed = []
-        self.languages = languages
+        self.languages = config.langs
         # guesses for all titles; kind of for debug purposes
         self.lang_guesses = []
         self.selection = []
         self.selection_langs = []
-        nltk.data.path.append(nltk_data)
+        nltk.data.path.append(config.nltk_data)
         self.lemmatizers = {
             "english": WordNetLemmatizer(),
             "german": HanoverTagger.HanoverTagger("morphmodel_ger.pgz"),
