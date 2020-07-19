@@ -6,11 +6,15 @@ Experimenting with NLP and machine learning.
 Based on thumbnail information on your YouTube Home page (signed out), i.e. your
 recommendations predict what video the user will click on next.
 
-Dependiencies:
+Dependiencies/Preparation:
 
 pip3 install pandas numpy matplotlib seaborn sklearn nltk gensim
 
 - for german:
 pip3 install HanTa
+
+### TODO:
+List download nltk
+download hanta morphmodel
 
 Just call ./predict.py
