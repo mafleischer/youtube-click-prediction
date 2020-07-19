@@ -62,6 +62,9 @@ class Scraper:
     def __init__(self, browser):
         self.browser = browser
 
+    def __del__(self):
+        del self.browser
+
     def getYouTube(self):
         self.browser.driver.get("http://youtube.com/")
 
