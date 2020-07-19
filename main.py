@@ -10,28 +10,25 @@ from nltk.corpus import stopwords
 from gensim.models import Word2Vec
 from nltk.corpus import brown, treebank, movie_reviews
 
+from config import Config
 from store_load import DB
 from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
 from gui import GUI
 
+from workers import processWriteToDB
+
 if __name__ == "__main__":
-    config = configparser.ConfigParser()
-    config.read("CONFIG")
-    WEBDRIVER_PATH = config["SELENIUM"]["WEBDRIVER_PATH"]
-    PROF_PATH = config["SELENIUM"]["FF_PROF_PATH"]
-    NLTK_DATA = config["NLTK"]["NLTK_DATA"]
-    LANGS = config["PREFERENCES"]["LANGS"].split()
-    # browser = Browser(WEBDRIVER_PATH, PROF_PATH)
-    # scraper = Scraper(browser)
+    config = Config()
+    config.read()
+    webdriver_path = config.webdriver_path
+    prof_path = config.prof_path
+
+    browser = Browser(webdriver_path, prof_path)
+    scraper = Scraper(browser)
 
     db = DB()
 
-    # processWriteToDB(tninfo, db)
-    processed = db.loadProcessed(
-        db.yt_proc_cols["lemma"] + ", " + db.yt_proc_cols["link"]
-    )
-    lemmas = [s[0].split() for s in processed]
     # print(processed)
     # w2v = Word2Vec(lemmas, min_count=1)
     # print(w2v.wv.most_similar("best"))
@@ -49,8 +46,8 @@ if __name__ == "__main__":
 
     # print(tninfo)
 
-    # gui = GUI(scraper, db, LANGS, NLTK_DATA)
-    # gui.run()
+    gui = GUI(browser, scraper, db)
+    gui.run()
 
     # el = browser.driver.find_element_by_link_text(tninfo[0][1])
     # el.click()
