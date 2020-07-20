@@ -16,8 +16,6 @@ from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
 from gui import GUI
 
-from workers import processWriteToDB
-
 if __name__ == "__main__":
     config = Config()
     config.read()
@@ -48,6 +46,13 @@ if __name__ == "__main__":
 
     gui = GUI(browser, scraper, db)
     gui.run()
+
+    # db2 = DB("ytdata_new.sqlite3")
+    # tninfo = [tup[1:] for tup in db.loadRaw()]
+    # from workers import Work
+    # work = Work(db2)
+    # work.filterRecords(tninfo)
+    # work.processWriteToDB(tninfo)
 
     # el = browser.driver.find_element_by_link_text(tninfo[0][1])
     # el.click()
