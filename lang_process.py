@@ -54,6 +54,7 @@ class TitleProcessor:
     def tokenizeAlnum(self):
         for i in range(len(self.processed)):
             toks = word_tokenize(self.processed[i])
+            toks = [tok.lower() for tok in toks]
             filtered_toks = []
             for t in range(len(toks)):
                 if toks[t].isalnum():
@@ -78,7 +79,7 @@ class TitleProcessor:
             filtered_toks = []
             lang = LANG_MAP[self.selection_langs[i]]
             for t in range(len(toks)):
-                if toks[t].lower() not in stopwords.words(lang):
+                if toks[t] not in stopwords.words(lang):
                     filtered_toks.append(toks[t])
             self.processed[i] = filtered_toks
 
