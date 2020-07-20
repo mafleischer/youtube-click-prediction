@@ -57,6 +57,13 @@ class Browser:
     def __del__(self):
         self.driver.quit()
 
+    def getYouTube(self):
+        self.driver.get("http://youtube.com/")
+
+    def clickLink(self, link):
+        el = self.driver.find_element_by_xpath('//a[@href="{}"]'.format(link))
+        el.click()
+
 
 class Scraper:
     def __init__(self, browser):
@@ -64,9 +71,6 @@ class Scraper:
 
     def __del__(self):
         del self.browser
-
-    def getYouTube(self):
-        self.browser.driver.get("http://youtube.com/")
 
     def getTNVideoInfo(self):
         """Scrape the titles of the thumbnails in the youtube
@@ -81,19 +85,30 @@ class Scraper:
             list: List of tuples: (link, title string)
         """
 
-        self.getYouTube()
+        self.browser.getYouTube()
+        try:
+            wait = WebDriverWait(self.browser.driver, 10)
+            wait.until(
+                ec.presence_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        "ytd-rich-section-renderer.style-scope:nth-child(14) > div:nth-child(1)",
+                    )
+                )
+            )
+        except TimeoutError:
+            print("Covid 19 section not located")
+
         src = self.browser.driver.find_element_by_tag_name("html").get_attribute(
             "outerHTML"
         )
 
-        # f = open("yt.html", "w")
-        # f.write(src)
-        # f.close()
-
-        # stub for now
         # f = open("yt.html", "r")
         # src = f.read()
         # f.close()
+        f = open("yt.html", "w")
+        f.write(src)
+        f.close()
 
         soup = BeautifulSoup(src, "html.parser")
 
@@ -144,6 +159,7 @@ class Scraper:
 
         # convert uploaded time strings to number of hours
 
+        pat_now = re.compile("NOW", re.IGNORECASE)
         pat_num = re.compile("[0-9]*")
         pat_min = re.compile("minutes")
         pat_hrs = re.compile("hour[s]?")
@@ -154,14 +170,15 @@ class Scraper:
 
         for i in range(len(uploaded_time)):
             tstr = uploaded_time[i]
-            num = int(pat_num.match(tstr).group())
+            now = pat_now.search(tstr)
+            num = int(pat_num.search(tstr).group())
             mins = pat_min.search(tstr)
             hrs = pat_hrs.search(tstr)
             d = pat_d.search(tstr)
             we = pat_we.search(tstr)
             mon = pat_mon.search(tstr)
             yrs = pat_yrs.search(tstr)
-            if mins:
+            if mins or now:
                 num = 0
             elif hrs:
                 pass
