@@ -96,7 +96,7 @@ class DB:
         sql_update = """UPDATE {} SET {} = 1 WHERE {} = ?;""".format(
             self.yttable_raw, self.yt_raw_cols["target"], self.yt_raw_cols["link"]
         )
-        self.db_con.execute(sql_update, link)
+        self.db_con.execute(sql_update, (link,))
 
     def isLinkInDB(self, link):
         sql_select_where_raw = """SELECT {0} FROM {1} WHERE {0} = '{2}';""".format(
