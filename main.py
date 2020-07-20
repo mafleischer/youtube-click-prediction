@@ -11,7 +11,7 @@ from gensim.models import Word2Vec
 from nltk.corpus import brown, treebank, movie_reviews
 
 from config import Config
-from store_load import DB
+from data_store_load import DB
 from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
 from gui import GUI
