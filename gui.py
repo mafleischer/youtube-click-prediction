@@ -2,7 +2,7 @@ from tkinter import Tk, Frame, Button, Listbox
 from tkinter import RIGHT, LEFT, TOP, BOTTOM, END
 from tkinter import SINGLE
 
-from workers import processWriteToDB
+from workers import Work
 
 
 def fn():
@@ -11,8 +11,10 @@ def fn():
 
 class GUI:
     def __init__(self, browser, scraper, db):
+        self.browser = browser
         self.scraper = scraper
         self.db = db
+        self.records = []  # used subsequently for listbox
 
         self.root = Tk()
         self.root.title("YouTube - Predict next click")
@@ -20,7 +22,7 @@ class GUI:
         self.frame_right = Frame(self.root, borderwidth=10, height=360, width=200)
         self.frame_right.pack(side=RIGHT)
         self.frame_right.pack_propagate(0)
-        self.frame_left = Frame(self.root, borderwidth=10, height=360, width=200)
+        self.frame_left = Frame(self.root, borderwidth=10, height=360, width=350)
         self.frame_left.pack(side=LEFT)
         self.frame_left.pack_propagate(0)
 
@@ -47,12 +49,11 @@ class GUI:
         )
         self.button_quit.pack(side=TOP)
 
-        self.listbox = Listbox(self.frame_left, selectmode=SINGLE, height=350)
+        self.listbox = Listbox(
+            self.frame_left, selectmode=SINGLE, height=350, width=200
+        )
         self.listbox.pack(side=BOTTOM)
         self.listbox.bind("<Double-Button-1>", fn)
-
-        for item in range(22):
-            self.listbox.insert(END, str(item))
 
     def __del__(self):
         del self.scraper
@@ -63,8 +64,20 @@ class GUI:
         self.root.mainloop()
 
     def clickYTScrape(self):
+        self.listbox.delete(0, END)
         tninfo = self.scraper.getTNVideoInfo()
-        processWriteToDB(tninfo, self.db)
+        work = Work(self.db)
+        work.filterRecords(tninfo)
+        work.processWriteToDB(tninfo)
+        self.records = tninfo
+        self.listbox.delete(0, END)
+        for rec in tninfo:
+            title = rec[1]
+            self.listbox.insert(END, title)
 
     def clickClickSelection(self):
-        pass
+        sel = self.listbox.curselection()
+        if sel:
+            link = self.records[sel[0]][0]
+            self.browser.clickLink(link)
+            self.db.updateClicked(link)
