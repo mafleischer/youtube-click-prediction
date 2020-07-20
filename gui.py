@@ -2,7 +2,7 @@ from tkinter import Tk, Frame, Button, Listbox
 from tkinter import RIGHT, LEFT, TOP, BOTTOM, END
 from tkinter import SINGLE
 
-from workers import Work
+from db_lang_workers import Work
 
 
 def fn():

@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     # db2 = DB("ytdata_new.sqlite3")
     # tninfo = [tup[1:] for tup in db.loadRaw()]
-    # from workers import Work
+    # from db_lang_workers import Work
     # work = Work(db2)
     # work.filterRecords(tninfo)
     # work.processWriteToDB(tninfo)
