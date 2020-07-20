@@ -27,23 +27,6 @@ if __name__ == "__main__":
 
     db = DB()
 
-    # print(processed)
-    # w2v = Word2Vec(lemmas, min_count=1)
-    # print(w2v.wv.most_similar("best"))
-
-    # tmp update clicked videos
-    # db.updateClicked(("/watch?v=idfv7Lw4Y_s",))
-    # db.updateClicked(("/watch?v=LJRTINVFZDM",))
-    # db.updateClicked(("/watch?v=1bzwYn8MGTs",))
-    # db.updateClicked(("/watch?v=lzPgYkUBgIQ",))
-    # db.updateClicked(("/watch?v=nmihGvY8NIk",))
-    # db.updateClicked(("/watch?v=IQwqmutHqWA",))
-    # db.updateClicked(("/watch?v=gdvMPPVQ7vY",))
-    # db.updateClicked(("/watch?v=BuVj73K_ak4",))
-    # db.updateClicked(("/watch?v=HjUv0Zv0T8o",))
-
-    # print(tninfo)
-
     gui = GUI(browser, scraper, db)
     gui.run()
 
@@ -53,6 +36,9 @@ if __name__ == "__main__":
     # work = Work(db2)
     # work.filterRecords(tninfo)
     # work.processWriteToDB(tninfo)
+
+    # w2v = Word2Vec(lemmas, min_count=1)
+    # print(w2v.wv.most_similar("best"))
 
     # el = browser.driver.find_element_by_link_text(tninfo[0][1])
     # el.click()
