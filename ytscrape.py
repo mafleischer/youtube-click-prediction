@@ -141,7 +141,7 @@ class Scraper:
         )
         uploaded_time = [span.text for span in spans_uploaded_time]
 
-        # process number strings in views
+        # process views string
 
         pat_num = re.compile("[0-9]*(?:\.[0-9]*)?")
         pat_k = re.compile("K")
@@ -171,7 +171,14 @@ class Scraper:
         for i in range(len(uploaded_time)):
             tstr = uploaded_time[i]
             now = pat_now.search(tstr)
-            num = int(pat_num.search(tstr).group())
+
+            try:
+                num = int(pat_num.search(tstr).group())
+            except ValueError:
+                # empty string
+                print("Number string of vid. {} empty.".format(title[i]))
+                num = 0
+
             mins = pat_min.search(tstr)
             hrs = pat_hrs.search(tstr)
             d = pat_d.search(tstr)
