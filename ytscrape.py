@@ -73,16 +73,14 @@ class Scraper:
         del self.browser
 
     def getTNVideoInfo(self):
-        """Scrape the titles of the thumbnails in the youtube
-        home page (signed out).
+        """Scrape the title, channel name, views and upload time
+        of the thumbnails in the youtube home page (signed out).
 
-        Args:
-            webdriver_path (str): path to geckodriver
-            firefox_profile (str, optional): Path to firefox profile. Should be passed as it makes
-            little sense for now. Defaults to None.
+        Convert the upload time to hours.
+        Add default target (clicked) value 0 to the records.
 
         Returns:
-            list: List of tuples: (link, title string)
+            list: List of tuples: (link, title string, channel name, views, upload time, 0)
         """
 
         self.browser.getYouTube()

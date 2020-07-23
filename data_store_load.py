@@ -29,7 +29,7 @@ class DB:
         if os.path.isfile(db_file):
             self.db_con = sqlite3.connect(db_file)
         else:
-            print("db created")
+            print("DB file created")
             self.db_con = sqlite3.connect(db_file)
             self._dbInit()
 

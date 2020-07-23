@@ -7,8 +7,16 @@ class Work:
         self.title_processor = None
 
     def filterRecords(self, records):
-        # this only saves the work of processing
-        # titles again that are in DB already
+        """Delete record tuples from list that are not in
+        languages pref. or are already in the DB.
+        
+        The latter only saves the superfluous work of processing
+        titles again.
+
+        Args:
+            records (list): list of tuples, records of raw data
+        """
+
         i = 0
         end = len(records)
         while i < end:
@@ -31,11 +39,9 @@ class Work:
                 i += 1
 
     def processWriteToDB(self, records):
-        """Do all the steps with records.
+        """Insert records, do the processing steps.
 
-        1. Check for already seen links, delete seen.
-        2. Filter languages. Delete records with not desired langs.
-        3. Language process the titles. Do each step of TitleProcessor
+        Language process the titles. Do each step of TitleProcessor
         separately and write each of the results to DB.
 
         Args:

@@ -6,6 +6,7 @@ from db_lang_workers import Work
 
 
 def fn():
+    # dummy
     pass
 
 
@@ -64,6 +65,9 @@ class GUI:
         self.root.mainloop()
 
     def clickYTScrape(self):
+        """Scrape, filter, process/insert,
+        fill the listbox with the title strings.
+        """
         self.listbox.delete(0, END)
         tninfo = self.scraper.getTNVideoInfo()
         work = Work(self.db)
