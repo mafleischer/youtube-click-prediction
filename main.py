@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # ft = FastText(brown)
     ft = FastText(brown.sents())
     ft.build_vocab(treebank.sents(), update=True)
-    ft.train(movie_reviews.sents())
+    ft.build_vocab(movie_reviews.sents(), update=True)
     ft.build_vocab(lemmas, update=True)
 
     vecs1 = np.array(
