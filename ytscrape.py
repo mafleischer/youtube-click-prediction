@@ -173,7 +173,7 @@ class Scraper:
             try:
                 num = int(pat_num.search(tstr).group())
             except ValueError:
-                # empty string
+                # empty string. Don't know when this occurs.
                 print("Number string of vid. {} empty.".format(title[i]))
                 num = 0
 
