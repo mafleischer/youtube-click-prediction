@@ -59,6 +59,18 @@ class Browser:
 
     def getYouTube(self):
         self.driver.get("http://youtube.com/")
+        try:
+            wait = WebDriverWait(self.driver, 15)
+            wait.until(
+                ec.presence_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        "ytd-rich-section-renderer.style-scope:nth-child(14) > div:nth-child(1)",
+                    )
+                )
+            )
+        except TimeoutError:
+            print("Covid 19 section not located")
 
     def clickLink(self, link):
         el = self.driver.find_element_by_xpath('//a[@href="{}"]'.format(link))
@@ -84,18 +96,6 @@ class Scraper:
         """
 
         self.browser.getYouTube()
-        try:
-            wait = WebDriverWait(self.browser.driver, 10)
-            wait.until(
-                ec.presence_of_element_located(
-                    (
-                        By.CSS_SELECTOR,
-                        "ytd-rich-section-renderer.style-scope:nth-child(14) > div:nth-child(1)",
-                    )
-                )
-            )
-        except TimeoutError:
-            print("Covid 19 section not located")
 
         src = self.browser.driver.find_element_by_tag_name("html").get_attribute(
             "outerHTML"
