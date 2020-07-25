@@ -3,6 +3,8 @@
 import os
 import sys
 
+import numpy as np
+
 import configparser
 
 import nltk
@@ -34,10 +36,61 @@ if __name__ == "__main__":
 
     lemmas = [tup[0].split() for tup in db.loadProcessed("lemmatized")]
     print(lemmas)
-    ft = FastText(lemmas, min_count=1)
-    print(ft.wv.most_similar(["philosophy", "science", "truth"]))
+    # ft = FastText(lemmas, min_count=1)
+    # # print(
+    # #     ft.wv.cosine_similarities(
+    # #         ["philosophy", "science", "truth"], ["brain", "study", "talk"]
+    # #     )
+    # # )
+    # vecs1 = np.array(
+    #     [
+    #         ft.wv.word_vec("philosopy"),
+    #         ft.wv.word_vec("science"),
+    #         ft.wv.word_vec("brain"),
+    #         ft.wv.word_vec("talk"),
+    #     ]
+    # )
+    # vecs2 = np.array(
+    #     [
+    #         ft.wv.word_vec("joe"),
+    #         ft.wv.word_vec("rogan"),
+    #         ft.wv.word_vec("science"),
+    #         ft.wv.word_vec("talk"),
+    #     ]
+    # )
+    # avg1 = np.mean(vecs1, axis=0)
+    # avg2 = np.mean(vecs2, axis=0)
+    # print(ft.wv.cosine_similarities(avg1, [avg2]))
+
+    # ft = FastText(brown)
+    ft = FastText(brown.sents())
+    ft.build_vocab(treebank.sents(), update=True)
+    ft.train(movie_reviews.sents())
+    ft.build_vocab(lemmas, update=True)
+
+    vecs1 = np.array(
+        [
+            ft.wv.word_vec("philosopy"),
+            ft.wv.word_vec("science"),
+            ft.wv.word_vec("brain"),
+            ft.wv.word_vec("talk"),
+        ]
+    )
+    vecs2 = np.array(
+        [
+            ft.wv.word_vec("joe"),
+            ft.wv.word_vec("rogan"),
+            ft.wv.word_vec("science"),
+            ft.wv.word_vec("talk"),
+        ]
+    )
+
+    avg1 = np.mean(vecs1, axis=0)
+    avg2 = np.mean(vecs2, axis=0)
+    print(ft.wv.cosine_similarities(avg1, [avg2]))
+
     # w2v = Word2Vec(lemmas, min_count=1)
-    # print(w2v.wv.most_similar(["left", "new"]))
+    # print(w2v.wv.wmdistance(["left", "new"]))
 
     # db2 = DB("ytdata_new.sqlite3")
     # tninfo = [tup[1:] for tup in db.loadRaw()]
