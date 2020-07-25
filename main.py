@@ -62,11 +62,32 @@ if __name__ == "__main__":
     # avg2 = np.mean(vecs2, axis=0)
     # print(ft.wv.cosine_similarities(avg1, [avg2]))
 
-    # ft = FastText(brown)
-    ft = FastText(brown.sents())
-    ft.build_vocab(treebank.sents(), update=True)
-    ft.build_vocab(movie_reviews.sents(), update=True)
-    ft.build_vocab(lemmas, update=True)
+    ft = FastText(min_count=1)
+    ft = FastText.load("ft_tmp.model")
+
+    ft.build_vocab(brown.sents())
+    ft.train(
+        brown.sents(),
+        total_examples=ft.corpus_count,
+        total_words=ft.corpus_total_words,
+        epochs=ft.epochs,
+    )
+    # ft.build_vocab(movie_reviews.sents(), update=True)
+    # ft.train(
+    #     movie_reviews.sents(),
+    #     total_examples=ft.corpus_count,
+    #     total_words=ft.corpus_total_words,
+    #     epochs=ft.epochs,
+    # )
+    # ft.build_vocab(lemmas, update=True)
+    # ft.train(
+    #     lemmas,
+    #     total_examples=ft.corpus_count,
+    #     total_words=ft.corpus_total_words,
+    #     epochs=ft.epochs,
+    # )
+
+    # ft.save("ft_tmp.model")
 
     vecs1 = np.array(
         [
@@ -78,10 +99,10 @@ if __name__ == "__main__":
     )
     vecs2 = np.array(
         [
-            ft.wv.word_vec("joe"),
-            ft.wv.word_vec("rogan"),
-            ft.wv.word_vec("science"),
-            ft.wv.word_vec("talk"),
+            ft.wv.word_vec("feces"),
+            ft.wv.word_vec("cab"),
+            ft.wv.word_vec("cabbage"),
+            ft.wv.word_vec("devil"),
         ]
     )
 
