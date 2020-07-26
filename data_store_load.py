@@ -92,6 +92,26 @@ class DB:
         cursor = self.db_con.execute(sql_select_all_raw)
         return cursor.fetchall()
 
+    def loadClicked(self, cols="*"):
+        sql_select_clicked_raw = """SELECT {} FROM {} WHERE {} = 1;""".format(
+            cols, self.yttable_raw, self.yt_raw_cols["target"]
+        )
+        cursor = self.db_con.execute(sql_select_clicked_raw)
+        return cursor.fetchall()
+
+    def loadClickedProc(self, cols="*"):
+        clicked_links = tuple(
+            tup[0] for tup in self.loadClicked(self.yt_raw_cols["link"])
+        )
+
+        param_str = "?, " * (len(clicked_links) - 1) + "?"
+
+        sql_select_clicked_proc = """SELECT {} FROM {} WHERE {} in ({});""".format(
+            cols, self.yttable_proc_titles, self.yt_proc_cols["link"], param_str
+        )
+        cursor = self.db_con.execute(sql_select_clicked_proc, clicked_links)
+        return cursor.fetchall()
+
     def updateClicked(self, link):
         sql_update = """UPDATE {} SET {} = 1 WHERE {} = ?;""".format(
             self.yttable_raw, self.yt_raw_cols["target"], self.yt_raw_cols["link"]
