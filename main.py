@@ -18,6 +18,7 @@ from config import Config
 from data_store_load import DB
 from ytscrape import Browser, Scraper
 from lang_process import TitleProcessor
+from models import FT
 from gui import GUI
 
 if __name__ == "__main__":
@@ -35,80 +36,48 @@ if __name__ == "__main__":
     # gui.run()
 
     lemmas = [tup[0].split() for tup in db.loadProcessed("lemmatized")]
-    print(lemmas)
-    # ft = FastText(lemmas, min_count=1)
-    # # print(
-    # #     ft.wv.cosine_similarities(
-    # #         ["philosophy", "science", "truth"], ["brain", "study", "talk"]
-    # #     )
-    # # )
-    # vecs1 = np.array(
+    # print(lemmas)
+
+    ft = FT(db)
+    # ft.save()
+
+    vecs1 = np.array(
+        [
+            ft.model.wv.word_vec("philosopy"),
+            ft.model.wv.word_vec("science"),
+            ft.model.wv.word_vec("brain"),
+            ft.model.wv.word_vec("talk"),
+        ]
+    )
+    # vecs2 = np.array(
     #     [
-    #         ft.wv.word_vec("philosopy"),
-    #         ft.wv.word_vec("science"),
-    #         ft.wv.word_vec("brain"),
-    #         ft.wv.word_vec("talk"),
+    #         ft.model.wv.word_vec("jordan"),
+    #         ft.model.wv.word_vec("peterson"),
+    #         ft.model.wv.word_vec("truth"),
+    #         ft.model.wv.word_vec("joe"),
     #     ]
     # )
     # vecs2 = np.array(
     #     [
-    #         ft.wv.word_vec("joe"),
-    #         ft.wv.word_vec("rogan"),
-    #         ft.wv.word_vec("science"),
-    #         ft.wv.word_vec("talk"),
+    #         ft.model.wv.word_vec("philosopy"),
+    #         ft.model.wv.word_vec("science"),
+    #         ft.model.wv.word_vec("brain"),
+    #         ft.model.wv.word_vec("math"),
     #     ]
     # )
-    # avg1 = np.mean(vecs1, axis=0)
-    # avg2 = np.mean(vecs2, axis=0)
-    # print(ft.wv.cosine_similarities(avg1, [avg2]))
-
-    ft = FastText(min_count=1)
-    ft = FastText.load("ft_tmp.model")
-
-    ft.build_vocab(brown.sents())
-    ft.train(
-        brown.sents(),
-        total_examples=ft.corpus_count,
-        total_words=ft.corpus_total_words,
-        epochs=ft.epochs,
-    )
-    # ft.build_vocab(movie_reviews.sents(), update=True)
-    # ft.train(
-    #     movie_reviews.sents(),
-    #     total_examples=ft.corpus_count,
-    #     total_words=ft.corpus_total_words,
-    #     epochs=ft.epochs,
-    # )
-    # ft.build_vocab(lemmas, update=True)
-    # ft.train(
-    #     lemmas,
-    #     total_examples=ft.corpus_count,
-    #     total_words=ft.corpus_total_words,
-    #     epochs=ft.epochs,
-    # )
-
-    # ft.save("ft_tmp.model")
-
-    vecs1 = np.array(
-        [
-            ft.wv.word_vec("philosopy"),
-            ft.wv.word_vec("science"),
-            ft.wv.word_vec("brain"),
-            ft.wv.word_vec("talk"),
-        ]
-    )
     vecs2 = np.array(
         [
-            ft.wv.word_vec("feces"),
-            ft.wv.word_vec("cab"),
-            ft.wv.word_vec("cabbage"),
-            ft.wv.word_vec("devil"),
+            ft.model.wv.word_vec("trash"),
+            ft.model.wv.word_vec("happy"),
+            ft.model.wv.word_vec("sword"),
+            ft.model.wv.word_vec("fighting"),
         ]
     )
 
     avg1 = np.mean(vecs1, axis=0)
     avg2 = np.mean(vecs2, axis=0)
-    print(ft.wv.cosine_similarities(avg1, [avg2]))
+    print(ft.model.wv.cosine_similarities(avg1, [avg2]))
+    print(ft.model.wv.wmdistance(["science", "brain"], ["science", "brainwaves"]))
 
     # w2v = Word2Vec(lemmas, min_count=1)
     # print(w2v.wv.wmdistance(["left", "new"]))
