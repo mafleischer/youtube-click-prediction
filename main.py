@@ -41,14 +41,14 @@ if __name__ == "__main__":
     ft = FT(db)
     # ft.save()
 
-    vecs1 = np.array(
-        [
-            ft.model.wv.word_vec("philosopy"),
-            ft.model.wv.word_vec("science"),
-            ft.model.wv.word_vec("brain"),
-            ft.model.wv.word_vec("talk"),
-        ]
-    )
+    # vecs1 = np.array(
+    #     [
+    #         ft.model.wv.word_vec("philosopy"),
+    #         ft.model.wv.word_vec("science"),
+    #         ft.model.wv.word_vec("brain"),
+    #         ft.model.wv.word_vec("talk"),
+    #     ]
+    # )
     # vecs2 = np.array(
     #     [
     #         ft.model.wv.word_vec("jordan"),
@@ -67,17 +67,29 @@ if __name__ == "__main__":
     # )
     vecs2 = np.array(
         [
-            ft.model.wv.word_vec("trash"),
-            ft.model.wv.word_vec("happy"),
-            ft.model.wv.word_vec("sword"),
-            ft.model.wv.word_vec("fighting"),
+            ft.model.wv.word_vec("joe"),
+            ft.model.wv.word_vec("rogan"),
+            ft.model.wv.word_vec("science"),
+            ft.model.wv.word_vec("math"),
         ]
     )
 
-    avg1 = np.mean(vecs1, axis=0)
+    # avg1 = np.mean(vecs1, axis=0)
     avg2 = np.mean(vecs2, axis=0)
-    print(ft.model.wv.cosine_similarities(avg1, [avg2]))
-    print(ft.model.wv.wmdistance(["science", "brain"], ["science", "brainwaves"]))
+    # print(ft.model.wv.cosine_similarities(avg1, [avg2]))
+    # print(ft.model.wv.wmdistance(["science", "brain"], ["science", "brainwaves"]))
+
+    strs = [tup[0] for tup in db.loadClickedProc(db.yt_proc_cols["lemma"])]
+    clicked_vecs = []
+    for s in strs:
+        title_vecs = []
+        for word in s:
+            vec = ft.model.wv.word_vec(word)
+            title_vecs.append(vec)
+        clicked_vecs.append(np.mean(np.array(title_vecs), axis=0))
+
+    avg_clicked = np.mean(np.array(clicked_vecs), axis=0)
+    print(ft.model.wv.cosine_similarities(avg_clicked, [avg2]))
 
     # w2v = Word2Vec(lemmas, min_count=1)
     # print(w2v.wv.wmdistance(["left", "new"]))
