@@ -85,11 +85,22 @@ class DB:
         cursor = self.db_con.execute(sql_select_all_raw)
         return cursor.fetchall()
 
-    def loadProcessed(self, cols="*"):
-        sql_select_all_raw = """SELECT {} FROM {};""".format(
-            cols, self.yttable_proc_titles
+    def loadProcessed(self, cols="*", links=None):
+        if links:
+            param_str = "?, " * (len(links) - 1) + "?"
+            where_str = "WHERE {} in ({})".format(self.yt_proc_cols["link"], param_str)
+        else:
+            where_str = ""
+
+        sql_select_proc = """SELECT {} FROM {} {};""".format(
+            cols, self.yttable_proc_titles, where_str
         )
-        cursor = self.db_con.execute(sql_select_all_raw)
+
+        if links:
+            cursor = self.db_con.execute(sql_select_proc, links)
+        else:
+            cursor = self.db_con.execute(sql_select_proc)
+
         return cursor.fetchall()
 
     def loadClicked(self, cols="*"):
