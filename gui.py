@@ -50,7 +50,7 @@ class GUI:
             self.frame_left, selectmode=SINGLE, height=350, width=200
         )
         self.listbox.pack(side=BOTTOM)
-        self.listbox.bind("<Double-Button-1>", fn)
+        self.listbox.bind("<Double-Button-1>", self._clickClickSelection)
 
     def __del__(self):
         del self.scraper
