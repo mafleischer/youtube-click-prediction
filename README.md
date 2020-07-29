@@ -12,17 +12,23 @@ titles are to everthing seen AND clicked so far.
 
 Rright now only English and German, only Firefox, only FastText model.
 
-- Dependiencies/Preparation:
+### Dependiencies/Preparation:
 
+```bash
 pip3 install pandas numpy matplotlib seaborn sklearn nltk gensim selenium
+```
 
 - for german:
+```bash
 pip3 install HanTa
+```
 Download file https://github.com/wartaal/HanTa/blob/master/HanTa/morphmodel_ger.pgz
 
 In a python terminal run:
+```python
 import nltk
 ntlk.download()
+```
 
 Select the corpora and packages options. Also enter the download path into CONFIG.
 
@@ -32,9 +38,12 @@ https://github.com/mozilla/geckodriver/releases
 Enter the other data in CONFIG.
 
 ### Run
- Call ./main
+ Call
+ ```bash
+ ./main
+ ```
 
-# TODO:
+### TODO:
 - Make notebook to visualize your YouTube "word bubble"
 - Incorporate views, clicks, upload time
 - Fix issues:
