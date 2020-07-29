@@ -105,4 +105,5 @@ class GUI:
             print(
                 "##################\n" + "Scores and titles:\n" + "##################\n"
             )
-            print(list(zip(prob_sort, rec_sort[:, 1])))
+            for tup in list(zip(prob_sort, rec_sort[:, 1])):
+                print(tup)
