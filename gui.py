@@ -9,11 +9,6 @@ from db_lang_workers import Work
 from models import FT
 
 
-def fn():
-    # dummy
-    pass
-
-
 class GUI:
     def __init__(self, browser, scraper, db):
         self.browser = browser
@@ -34,7 +29,7 @@ class GUI:
         self.frame_left.pack_propagate(0)
 
         self.button_scrape = Button(
-            self.frame_right, text="Scrape YT", width=50, command=self.clickYTScrape
+            self.frame_right, text="Scrape YT", width=50, command=self._clickYTScrape
         )
         self.button_scrape.pack(side=TOP)
 
@@ -42,19 +37,14 @@ class GUI:
             self.frame_right,
             text="Click selection",
             width=50,
-            command=self.clickClickSelection,
+            command=self._clickClickSelection,
         )
         self.button_click.pack(side=TOP)
-
-        self.button_visuals = Button(
-            self.frame_right, text="Visuals", width=50, command=fn
-        )
-        self.button_visuals.pack(side=TOP, pady=20)
 
         self.button_quit = Button(
             self.frame_right, text="Quit", width=50, command=self.__del__
         )
-        self.button_quit.pack(side=TOP)
+        self.button_quit.pack(side=TOP, pady=30)
 
         self.listbox = Listbox(
             self.frame_left, selectmode=SINGLE, height=350, width=200
@@ -70,7 +60,7 @@ class GUI:
     def run(self):
         self.root.mainloop()
 
-    def clickYTScrape(self):
+    def _clickYTScrape(self):
         """Scrape, filter, process/insert,
         fill the listbox with the title strings.
         """
@@ -90,7 +80,7 @@ class GUI:
         self.ft.incTrain(tuple(links))
         self.click_prob = self.ft.similScraped2Clicked(tuple(links))
 
-    def clickClickSelection(self):
+    def _clickClickSelection(self):
         """Simulate user click on video and print scores.
 
         Pass selected link to Browser object, i.e. selenium.
