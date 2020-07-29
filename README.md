@@ -4,17 +4,36 @@
 
 Experimenting with NLP and machine learning.
 Based on thumbnail information on your YouTube Home page (signed out), i.e. your
-recommendations predict what video the user will click on next.
+recommendations, predict what video the user will click on next.
 
-Dependiencies/Preparation:
+First baseline:
+Scrape info, store in DB, use titles, train FastText, compute how similar the scraped
+titles are to everthing seen AND clicked so far.
 
-pip3 install pandas numpy matplotlib seaborn sklearn nltk gensim
+- Dependiencies/Preparation:
+
+pip3 install pandas numpy matplotlib seaborn sklearn nltk gensim selenium
+
+In a python terminal run:
+import nltk
+ntlk.download()
+
+Select the corpora and packages options. Also enter the download path into CONFIG.
+
 
 - for german:
 pip3 install HanTa
+Download file https://github.com/wartaal/HanTa/blob/master/HanTa/morphmodel_ger.pgz
 
-### TODO:
-List download nltk
-download hanta morphmodel
+### Run
+ Call ./main
 
-Just call ./predict.py
+# TODO:
+- Make notebook to visualize your YouTube "word bubble"
+- Incorporate views, clicks, upload time
+- Fix issues:
+  * Frequent very bad language guesses by nltk
+  * Bad lemmatization
+  * Character problems when inserting in tkinter listbox
+  * Covid section sometimes has different css selector
+  * Upload time (e.g. Streamed x y ago) in different CSS element sometimes.
