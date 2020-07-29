@@ -10,9 +10,15 @@ First baseline:
 Scrape info, store in DB, use titles, train FastText, compute how similar the scraped
 titles are to everthing seen AND clicked so far.
 
+Rright now only English and German, only Firefox, only FastText model.
+
 - Dependiencies/Preparation:
 
 pip3 install pandas numpy matplotlib seaborn sklearn nltk gensim selenium
+
+- for german:
+pip3 install HanTa
+Download file https://github.com/wartaal/HanTa/blob/master/HanTa/morphmodel_ger.pgz
 
 In a python terminal run:
 import nltk
@@ -20,10 +26,10 @@ ntlk.download()
 
 Select the corpora and packages options. Also enter the download path into CONFIG.
 
+Download selenium driver for FF for you version:
+https://github.com/mozilla/geckodriver/releases
 
-- for german:
-pip3 install HanTa
-Download file https://github.com/wartaal/HanTa/blob/master/HanTa/morphmodel_ger.pgz
+Enter the other data in CONFIG.
 
 ### Run
  Call ./main
