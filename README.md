@@ -46,6 +46,7 @@ Enter the other data in CONFIG.
 ### TODO:
 - Make notebook to visualize your YouTube "word bubble"
 - Incorporate views, clicks, upload time
+- Try soft cosine similarity
 - Fix issues:
   * Frequent very bad language guesses by nltk
   * Bad lemmatization
