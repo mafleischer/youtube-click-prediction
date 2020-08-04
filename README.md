@@ -43,11 +43,15 @@ Enter the other data in CONFIG.
  ./main
  ```
 
+Click YTScrape, choose title from list and double click (or click button).
+
 ### TODO:
 - Make notebook to visualize your YouTube "word bubble"
 - Incorporate views, clicks, upload time
 - Try soft cosine similarity
+- don't use selenium. Use JS mokey script in "normal" browser.
 - Fix issues:
+  * speed everything up (scraping, browser and GUI startup)
   * Frequent very bad language guesses by nltk
   * Bad lemmatization
   * Character problems when inserting in tkinter listbox
