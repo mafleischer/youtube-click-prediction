@@ -62,3 +62,5 @@ class Work:
         self.db.insertProcessedRecords(
             list(zip([rec[0] for rec in records], toks_pure, no_stop, lemmas))
         )
+
+        self.db.db_con.commit()
