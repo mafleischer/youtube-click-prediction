@@ -97,10 +97,10 @@ class GUI:
             prob_sort = np.array(self.click_prob)[argsort]
             rec_sort = np.array(self.records)[argsort]
 
-            if link in rec_sort[:3, 0]:
-                print("\n+++ HIT! +++ Video was in 3 most probable.\n")
+            if link in rec_sort[:5, 0]:
+                print("\n+++ HIT! +++ Video was in 5 most probable.\n")
             else:
-                print("\n--- MISS! --- Video was not in 3 most probable.\n")
+                print("\n--- MISS! --- Video was not in 5 most probable.\n")
 
             print(
                 "##################\n" + "Scores and titles:\n" + "##################\n"
