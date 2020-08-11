@@ -49,6 +49,7 @@ Click YTScrape, choose title from list and double click (or click button).
 - Make notebook to visualize your YouTube "word bubble"
 - Incorporate views, clicks, upload time
 - Try soft cosine similarity
+- Don't use average of clicked vids. - Make robust against "outlier clicks"
 - don't use selenium. Use JS mokey script in "normal" browser.
 - Fix issues:
   * speed everything up (scraping, browser and GUI startup)
