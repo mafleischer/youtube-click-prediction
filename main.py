@@ -83,7 +83,9 @@ if __name__ == "__main__":
 
     # db2 = DB("ytdata_new.sqlite3")
     # tninfo = [tup[1:] for tup in db.loadRaw()]
-    # from db_lang_workers import Work
-    # work = Work(db2)
-    # work.filterRecords(tninfo)
-    # work.processWriteToDB(tninfo)
+    # from db_lang_workers import processWriteToDB
+
+    # title_processor = TitleProcessor([tup[1] for tup in tninfo[815:]])
+    # title_processor.guessLanguages()
+    # title_processor.selection_langs = title_processor.lang_guesses
+    # processWriteToDB(tninfo[815:], db2, title_processor)
