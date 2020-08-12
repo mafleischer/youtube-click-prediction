@@ -55,6 +55,5 @@ Click YTScrape, choose title from list and double click (or click button).
   * speed everything up (scraping, browser and GUI startup)
   * Frequent very bad language guesses by nltk
   * Bad lemmatization
-  * Character problems when inserting in tkinter listbox
   * Covid section sometimes has different css selector
   * Upload time (e.g. Streamed x y ago) in different CSS element sometimes.
