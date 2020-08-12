@@ -31,7 +31,7 @@ class TitleProcessor:
             "german": HanoverTagger.HanoverTagger("morphmodel_ger.pgz"),
         }
 
-    def _guessLanguages(self):
+    def guessLanguages(self):
         textcat = TextCat()
         for title in self.title_list:
             lang = textcat.guess_language(title)
@@ -43,7 +43,8 @@ class TitleProcessor:
         """Only include titles for processing of which the
         language is in self.languages, created by _guessLanguages().
         """
-        self._guessLanguages()
+
+        self.guessLanguages()
 
         for i in range(len(self.title_list)):
             if self.lang_guesses[i] in self.languages:
@@ -52,6 +53,10 @@ class TitleProcessor:
                 self.processed.append(self.title_list[i])
 
     def tokenizeAlnum(self):
+
+        if not self.processed:
+            self.processed = self.title_list
+
         for i in range(len(self.processed)):
             toks = word_tokenize(self.processed[i])
             toks = [tok.lower() for tok in toks]
@@ -74,6 +79,10 @@ class TitleProcessor:
         # TODO:
 
     def removeStopwords(self):
+
+        if not self.processed:
+            self.processed = self.title_list
+
         for i in range(len(self.processed)):
             toks = self.processed[i]
             filtered_toks = []
@@ -107,6 +116,9 @@ class TitleProcessor:
     def lemmatize(self):
         """Lemmatize all lists of tokens in self.processed.
         """
+
+        if not self.processed:
+            self.processed = self.title_list
 
         # tokenize the sentence and find the POS tag for each token
         for i in range(len(self.processed)):

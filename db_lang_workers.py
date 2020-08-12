@@ -34,8 +34,10 @@ def filterRecords(records, db):
         else:
             i += 1
 
+    return title_processor
 
-def processWriteToDB(records, db):
+
+def processWriteToDB(records, db, title_processor):
     """Insert records, do the processing steps.
 
     Language process the titles. Do each step of TitleProcessor
@@ -48,7 +50,6 @@ def processWriteToDB(records, db):
 
     db.insertYTRawRecords(records)
 
-    title_processor = TitleProcessor([rec[1] for rec in records])
     title_processor.tokenizeAlnum()
     toks_pure = [" ".join(toklist) for toklist in title_processor.processed]
     title_processor.removeStopwords()
