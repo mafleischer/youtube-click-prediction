@@ -1,11 +1,11 @@
 from tkinter import Tk, Frame, Button, Listbox
 from tkinter import RIGHT, LEFT, TOP, BOTTOM, END
 from tkinter import SINGLE
+from tkinter import TclError
 
-# tmp
 import numpy as np
 
-from db_lang_workers import Work
+from db_lang_workers import filterRecords, processWriteToDB
 from models import FT
 
 
@@ -66,9 +66,11 @@ class GUI:
         """
         self.listbox.delete(0, END)
         tninfo = self.scraper.getTNVideoInfo()
-        work = Work(self.db)
-        work.filterRecords(tninfo)
-        work.processWriteToDB(tninfo)
+
+        filterRecords(tninfo, self.db)
+        processWriteToDB(tninfo, self.db)
+        self.db.db_con.commit()
+
         self.records = tninfo
         self.listbox.delete(0, END)
         links = []
