@@ -19,6 +19,7 @@ class GUI:
         self.click_prob = []  # holds probabilites / similarities of scraped titles
 
         self.root = Tk()
+        self.root.tk.call("encoding", "system", "unicode")
         self.root.title("YouTube - Predict next click")
 
         self.frame_right = Frame(self.root, borderwidth=10, height=360, width=200)
@@ -67,8 +68,8 @@ class GUI:
         self.listbox.delete(0, END)
         tninfo = self.scraper.getTNVideoInfo()
 
-        filterRecords(tninfo, self.db)
-        processWriteToDB(tninfo, self.db)
+        title_processor = filterRecords(tninfo, self.db)
+        processWriteToDB(tninfo, self.db, title_processor)
         self.db.db_con.commit()
 
         self.records = tninfo
